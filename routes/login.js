@@ -30,7 +30,7 @@ router.post('/',async(req,res)=>{
                             res.cookie('user',res1._id,{
                                 expires: new Date(Date.now() + 9000000000),
                                 httponly:true
-                            }).json({success:true,message:'Login succeed!',ref:'/'})
+                            }).json({success:true,message:'Login succeed!'})
                         }
                     }
                 });
