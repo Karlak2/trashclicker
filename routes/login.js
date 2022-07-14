@@ -18,14 +18,14 @@ router.post('/',async(req,res)=>{
         .then(res1=>{
             console.log(res1)
             if(!res1){
-                res.json({success:false,message:'Invalid username or password!1'})
+                res.json({success:false,message:'Invalid username or password!'})
             } else {
                 bcrypt.compare(password, res1.password, function(err, result) {
                     if(err){
                         console.log(err)
                     } else {
                         if(!result){
-                            res.json({success:false,message:'Invalid username or password!2'})
+                            res.json({success:false,message:'Invalid username or password!'})
                         } else {
                             res.cookie('user',res1._id,{
                                 expires: new Date(Date.now() + 9000000000),
