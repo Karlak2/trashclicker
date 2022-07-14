@@ -25,12 +25,9 @@ router.post('/',async(req,res)=>{
                         console.log(err)
                     } else {
                         if(!result){
-                            res.json({success:false,message:'Invalid username or password!'})
+                            res.json({success:false,message:'Invalid username or password!2'})
                         } else {
-                            res.cookie('user',res1._id,{
-                                expires: new Date(Date.now() + 9000000000),
-                                httponly:true
-                            }).json({success:true,message:'Login succeed!'})
+                            res.json({success:true,message:'Login succeed!',id:res1._id})
                         }
                     }
                 });

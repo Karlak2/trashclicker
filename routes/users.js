@@ -20,7 +20,7 @@ router.get('/',async(req,res)=>{
         res.json({success:true,users:usernames})
     })
     .catch(err=>{
-        res.json({success:false,message:err})
+        res.json({success:false,message:'No users registered'})
     })
 })
 
@@ -42,26 +42,33 @@ router.get("/:getId",async(req,res)=>{
 
 
 router.put('/:putId',registercontrol,async(req,res)=>{
+    const {email, username,password}=req.body
     let id=req.params.putId
-    bcrypt.hash(req.body.password, 10,async function(err, hash) {
-        if(err){
-            console.log('Error in hash')
-        } else {
-            await User.updateOne({_id:id},{
-                email:req.body.email,
-                username:req.body.username,
-                password:hash
-            })
-            res.json({success:true,message:'User data updated'})
-        }
-    });
+    if(email&&username&&password){
+        bcrypt.hash(req.body.password, 10,async function(err, hash) {
+            if(err){
+                console.log('Error in hash')
+            } else {
+                await User.updateOne({_id:id},{
+                    email:req.body.email,
+                    username:req.body.username,
+                    password:hash
+                })
+                res.json({success:true,message:'User data updated'})
+            }
+        });
+    } else{
+        res.json({
+            success:false,message:'Missing fields required to fill!'
+        })
+    }
 })
 
 router.delete('/:delId',async(req,res)=>{
     try {
         await User.deleteOne({_id:req.params.delId})
         .then(()=>{
-            res.json({success:true})
+            res.json({success:true,message: 'Deleting was success!'})
         })
         .catch(err=>{
             res.json({success:false,message:'Deleting was failed!'})
