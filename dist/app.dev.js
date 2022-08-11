@@ -3,39 +3,50 @@
 var express = require('express');
 
 var app = express();
+
+var mongoose = require("mongoose");
+
+var cors = require('cors');
+
+var cookieParser = require("cookie-parser");
+
 app.use(express["static"]('public'));
+app.use(cookieParser()); // app.use(express.urlencoded({ extended: true }));
 
 var fs = require("fs-extra");
 
 var bodyParser = require('body-parser');
 
-var cors = require('cors');
+app.use(bodyParser.json());
 
 var login = require('./routes/login');
 
+var register = require('./routes/register');
+
+var users = require('./routes/users');
+
 app.use('/login', login);
-app.use(cors());
-app.use(bodyParser.json());
-app.get('/', function _callee(req, res) {
-  var ind;
-  return regeneratorRuntime.async(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.next = 2;
-          return regeneratorRuntime.awrap(fs.readFile('public/mainpage/index.html', 'utf-8'));
-
-        case 2:
-          ind = _context.sent;
-          res.send(ind);
-
-        case 4:
-        case "end":
-          return _context.stop();
-      }
-    }
+app.use('/register', register);
+app.use('/users', users);
+app.get('/', function (req, res) {
+  console.log('Clicked');
+  res.send({
+    word: 'Hi'
   });
 });
-app.listen(3000, function () {
-  console.log('App started at localhost:3000!');
+mongoose.connect("mongodb://localhost/trashclicker", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}, function () {
+  console.log("CONNECTED DB");
+});
+var db = mongoose.connection;
+db.on('error', function (error) {
+  return console.error(error);
+});
+db.once('open', function () {
+  return console.log("Connected to database");
+});
+app.listen(8080, function () {
+  console.log('App started at localhost:8080!');
 });
